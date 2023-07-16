@@ -10,6 +10,8 @@ public interface AddressRepo extends JpaRepository<AddressEntity,Integer> {
 
 
     //get the person details by email
-    @Query(value = "select * from address_book where email=:email",nativeQuery = true)
     AddressEntity findByEmail(String email);
+
+
+
 }
