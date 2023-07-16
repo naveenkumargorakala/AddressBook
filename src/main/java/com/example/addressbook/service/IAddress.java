@@ -29,4 +29,14 @@ public interface IAddress {
 
     //get the person details by email
     AddressEntity getByEmail(String email);
+
+    String create1(AddressDTO dtoEntity);
+
+    String update1(AddressDTO dto,int id,String token);
+
+    AddressEntity retrieve(String token);
+
+    String userById(int id);
+
+    String deleteUser(int id,String token);
 }

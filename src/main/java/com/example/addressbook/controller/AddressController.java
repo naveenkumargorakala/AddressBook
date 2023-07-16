@@ -19,6 +19,7 @@ import java.util.List;
 public class AddressController {
 
     // Check Whether the IOC Container have the Object or not
+    //created object
     @Autowired
     IAddress addressService;
 
@@ -44,7 +45,7 @@ public class AddressController {
 
     //get the person details by id
     @GetMapping("/getbyid/{id}")
-    public ResponseEntity<ResponseDTO> getBuId(@PathVariable int id){
+    public ResponseEntity<ResponseDTO> getById(@PathVariable int id){
         AddressEntity person = addressService.getPeron(id);
         ResponseDTO responseDTO = new ResponseDTO(person,id+" person details...");
         log.info(id+"details are shown");
@@ -75,6 +76,50 @@ public class AddressController {
     public ResponseEntity<ResponseDTO> getByEmail(@PathVariable String email){
         AddressEntity person = addressService.getByEmail(email);
         ResponseDTO responseDTO = new ResponseDTO(person,"person details by email...");
+        return new ResponseEntity<>(responseDTO,HttpStatus.OK);
+    }
+
+
+    //add user details and generate token
+    @PostMapping("/adduser")
+    public ResponseEntity<ResponseDTO> addPerson1(@Valid @RequestBody AddressDTO dtoEntity){
+        String newPerson = addressService.create1(dtoEntity);
+        ResponseDTO responseDTO = new ResponseDTO(newPerson,"Person details Created...");
+        log.info("adding Person details");
+        return new ResponseEntity<>(responseDTO, HttpStatus.CREATED);
+    }
+
+
+    //update user by id and generate token
+    @PutMapping("/updateuser/{id}/{token}")
+    public ResponseEntity<ResponseDTO> update1(@RequestBody AddressDTO dto,@PathVariable int id,@PathVariable String token){
+        String entity = addressService.update1(dto,id,token);
+        ResponseDTO responseDTO =new ResponseDTO(entity,"person details updated...");
+        return new ResponseEntity<>(responseDTO,HttpStatus.ACCEPTED);
+    }
+
+
+    //get the details of user by id
+    @GetMapping("/retrieve/{token}")
+    public ResponseEntity<ResponseDTO> retrieve(@PathVariable String token){
+        AddressEntity user = addressService.retrieve(token);
+        ResponseDTO responseDTO =new ResponseDTO(user,"user detailsss...");
+        return new ResponseEntity<>(responseDTO,HttpStatus.OK);
+    }
+
+    //generate token by id
+    @GetMapping("/generatetokenbyid/{id}")
+    public ResponseEntity<ResponseDTO> userById(@PathVariable int id){
+        String user = addressService.userById(id);
+        ResponseDTO responseDTO = new ResponseDTO(user,id+" details...");
+        return new ResponseEntity<>(responseDTO,HttpStatus.FOUND);
+    }
+
+    //delete User by Id
+    @DeleteMapping("deleteuser/{id}/{token}")
+    public ResponseEntity<ResponseDTO> deleteById(@PathVariable int id,@PathVariable String token){
+        String message = addressService.deleteUser(id,token);
+        ResponseDTO responseDTO = new ResponseDTO(message," user id:"+ id);
         return new ResponseEntity<>(responseDTO,HttpStatus.OK);
     }
 }
